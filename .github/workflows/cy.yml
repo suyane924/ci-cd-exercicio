@@ -1,5 +1,8 @@
 name: CI/CD Pipeline
 
+permissions:
+  contents: write   # permite criar tags e releases
+
 on:
   push:
     branches:
@@ -33,11 +36,10 @@ jobs:
 
       - name: Build artifact
         run: |
-          chmod +x build.sh
-          ./build.sh
+          zip -r projeto.zip .
 
       - name: Create GitHub Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.run_number }}
